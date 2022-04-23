@@ -1,0 +1,63 @@
+(ns acme.main
+  ;; pure dart package are imported using string
+  (:require ["package:flutter/material.dart"
+             :refer [MaterialApp Widget Scaffold MainAxisAlignment Colors Theme
+                     FloatingActionButton Icon Icons ThemeData runApp AppBar State]]
+            ["package:flutter/widgets.dart"
+             :refer [Text Center Column StatefulWidget StatelessWidget]]
+            ["package:flutter/painting.dart"
+             :refer [TextStyle]]))
+
+;;; A recreation of the Flutter Test Drive: https://docs.flutter.dev/get-started/test-drive
+;;; Derived from: https://github.com/Liverm0r/minataurus/tree/custom-widget
+;;;          and: https://github.com/Tensegritics/ClojureDartPreview/blob/main/doc/flutter-quick-start.md
+
+(deftype MyHomePageState [counter]
+  :extends State
+
+  (^Widget build [thisPageState ctx]
+    (let [theme (Theme/of ctx)]
+      (prn :pagestat-build!!!!!!!!!! @counter)
+      (Scaffold.
+        ;; this nested app bar is not part of the offical test drive...
+        :appBar (AppBar.
+                  :title (Text. (str "At " (.now dart:core/DateTime))))
+        :body (Center.
+                :child (Column.
+                         :mainAxisAlignment MainAxisAlignment/center
+                         :children [(Text. "You have clicked the button this many times:"
+                                      :style (TextStyle.
+                                               :color Colors/black
+                                               :fontSize 18.0))
+                                    (Text. (str @counter)
+                                      :style (.headline4 (.textTheme theme)))]))
+        :floatingActionButton (FloatingActionButton.
+                                :onPressed (fn ^void []
+                                             (.setState thisPageState #(do (swap! counter inc) nil)))
+                                :tooltip "Increment"
+                                :child (Icon. Icons/add
+                                         :color Colors/black))))))
+
+(deftype MyHomePage [title]
+  :extends StatefulWidget
+  (^MyHomePageState createState [this]
+    (MyHomePageState.
+      ;; the counter:
+      (atom 0))))
+
+(deftype MyApp []
+  :extends StatelessWidget
+  (^Widget build [this ctx]
+    (MaterialApp.
+      :title "Flutter Demo" ;; no idea where this ends up
+      :theme (ThemeData.
+               :primarySwatch Colors/blue)
+      :home (Scaffold.
+              :appBar (AppBar.
+                        :title (Text. "Flutter Test Drive: Counter"))
+              :body (MyHomePage. "Flutter Demo Home Page")))))
+
+(defn main []
+  ;; we emulate the Flutter minimalist runApp+MyApp
+  (prn :main-console-output!!!!!!!!!)
+  (runApp (MyApp.)))
