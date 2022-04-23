@@ -33,7 +33,8 @@
                                       :style (.headline4 (.textTheme theme)))]))
         :floatingActionButton (FloatingActionButton.
                                 :onPressed (fn ^void []
-                                             (.setState thisPageState #(do (swap! counter inc) nil)))
+                                             (.setState thisPageState
+                                               #(do (swap! counter inc) nil)))
                                 :tooltip "Increment"
                                 :child (Icon. Icons/add
                                          :color Colors/black))))))
